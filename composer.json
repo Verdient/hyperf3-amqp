@@ -1,0 +1,24 @@
+{
+    "name": "verdient/hyperf3-amqp",
+    "type": "library",
+    "require": {
+        "hyperf/command": "^3.1",
+        "hyperf/context": "^3.1",
+        "hyperf/amqp": "^3.1",
+        "hyperf/config": "^3.1",
+        "hyperf/logger": "^3.1",
+        "phpdocumentor/reflection-docblock": "^5.3",
+        "verdient/cli": "^0.0",
+        "verdient/hyperf3-exception": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Verdient\\Hyperf3\\Amqp\\": "src"
+        }
+    },
+    "extra": {
+        "hyperf": {
+            "config": "Verdient\\Hyperf3\\Amqp\\ConfigProvider"
+        }
+    }
+}
