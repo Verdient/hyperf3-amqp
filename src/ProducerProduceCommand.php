@@ -18,7 +18,6 @@ use Verdient\cli\Console;
  */
 class ProducerProduceCommand extends Command
 {
-    use HasProducer;
     use ParseProducers;
 
     /**
@@ -129,7 +128,7 @@ class ProducerProduceCommand extends Command
             $message = $reflectClass->newInstance();
         }
 
-        $this->produce($message);
+        Producer::produce($message);
 
         $this->info('消息生产成功');
 
