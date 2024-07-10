@@ -68,7 +68,7 @@ trait HasLogger
                     /** @var LoggerFactory|null */
                     $loggerFactory = ApplicationContext::getContainer()->get(LoggerFactory::class);
                     if ($loggerFactory) {
-                        $this->logger = $loggerFactory->get($this->getLoggerName(), $this->getLoggerGroup());
+                        $this->logger = $loggerFactory->get(static::class, $group);
                     }
                 }
             }
