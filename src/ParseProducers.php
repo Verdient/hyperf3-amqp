@@ -12,12 +12,14 @@ use phpDocumentor\Reflection\DocBlockFactory;
 
 /**
  * 解析生产者
+ *
  * @author Verdient。
  */
 trait ParseProducers
 {
     /**
      * 解析生产者
+     *
      * @author Verdient。
      */
     public function parseProducers(): array

@@ -14,12 +14,14 @@ use function Hyperf\Support\make;
 
 /**
  * 解析消费者
+ *
  * @author Verdient。
  */
 trait ParseConsumers
 {
     /**
      * 解析消费者
+     *
      * @author Verdient。
      */
     public function parseConsumers(): array

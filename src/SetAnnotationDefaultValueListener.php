@@ -6,31 +6,26 @@ namespace Verdient\Hyperf3\Amqp;
 
 use Hyperf\Amqp\Annotation\Consumer;
 use Hyperf\Amqp\Annotation\Producer;
-use Hyperf\Contract\ContainerInterface;
 use Hyperf\Di\Annotation\AnnotationCollector;
 use Hyperf\Event\Contract\ListenerInterface;
 use Hyperf\Framework\Event\BootApplication;
 use Hyperf\Stringable\Str;
+use Override;
+use Verdient\Hyperf3\Di\Container;
 
 use function Hyperf\Support\env;
 
 /**
- * 消费者进程注册监听器
+ * 设置注解默认值监听器
+ *
  * @author Verdient。
  */
-class AnnotationDefaultListener implements ListenerInterface
+class SetAnnotationDefaultValueListener implements ListenerInterface
 {
     /**
      * @author Verdient。
      */
-    public function __construct(protected ContainerInterface $container)
-    {
-    }
-
-    /**
-     * @inheritdoc
-     * @author Verdient。
-     */
+    #[Override]
     public function listen(): array
     {
         return [
@@ -39,15 +34,22 @@ class AnnotationDefaultListener implements ListenerInterface
     }
 
     /**
-     * @inheritdoc
      * @author Verdient。
      */
+    #[Override]
     public function process(object $event): void
     {
-        $classes = AnnotationCollector::getClassesByAnnotation(Consumer::class);
+        $command = $_SERVER['argv'][1] ?? null;
 
-        /** @var EnablerManager */
-        $enablerManager = $this->container->get(EnablerManager::class);
+        if ($command === 'server:watch') {
+            return;
+        }
+
+        if (!$enablerManager = Container::getOrNull(EnablerManager::class)) {
+            return;
+        }
+
+        $classes = AnnotationCollector::getClassesByAnnotation(Consumer::class);
 
         foreach ($classes as $class => $annotation) {
 
@@ -58,7 +60,13 @@ class AnnotationDefaultListener implements ListenerInterface
             }
 
             if (empty($annotation->exchange) || empty($annotation->routingKey)) {
+
                 $parts = explode('\\', $class);
+
+                if (count($parts) === 4 && str_starts_with($class, 'App\Amqp\Consumer\\')) {
+                    $parts[] = 'Default';
+                }
+
                 if (empty($annotation->routingKey)) {
                     $annotation->routingKey = end($parts);
                     if (substr($annotation->routingKey, -8) === 'Consumer') {
@@ -67,8 +75,13 @@ class AnnotationDefaultListener implements ListenerInterface
                 } else {
                     end($parts);
                 }
+
                 if (empty($annotation->exchange)) {
                     $annotation->exchange = prev($parts);
+                }
+
+                if (substr($annotation->exchange, -8) === 'Consumer') {
+                    $annotation->exchange = substr($annotation->exchange, 0, -8);
                 }
             }
 
@@ -82,7 +95,13 @@ class AnnotationDefaultListener implements ListenerInterface
         foreach ($classes as $class => $annotation) {
 
             if (empty($annotation->exchange) || empty($annotation->routingKey)) {
+
                 $parts = explode('\\', $class);
+
+                if (count($parts) === 4 && str_starts_with($class, 'App\Amqp\Producer\\')) {
+                    $parts[] = 'Default';
+                }
+
                 if (empty($annotation->routingKey)) {
                     $annotation->routingKey = end($parts);
                     if (substr($annotation->routingKey, -8) === 'Producer') {
@@ -94,14 +113,17 @@ class AnnotationDefaultListener implements ListenerInterface
                 if (empty($annotation->exchange)) {
                     $annotation->exchange = prev($parts);
                 }
+                if (substr($annotation->exchange, -8) === 'Producer') {
+                    $annotation->exchange = substr($annotation->exchange, 0, -8);
+                }
             }
         }
     }
 
     /**
      * 获取环境变量名称
+     *
      * @param string $class 类名
-     * @return string
      * @author Verdient。
      */
     protected function getEnvName(string $class): string

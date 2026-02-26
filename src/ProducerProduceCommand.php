@@ -6,6 +6,7 @@ namespace Verdient\Hyperf3\Amqp;
 
 use Hyperf\Command\Command;
 use Hyperf\Di\ReflectionManager;
+use Override;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use ReflectionNamedType;
@@ -14,6 +15,7 @@ use Verdient\cli\Console;
 
 /**
  * 生产消息
+ *
  * @author Verdient。
  */
 class ProducerProduceCommand extends Command
@@ -22,12 +24,14 @@ class ProducerProduceCommand extends Command
 
     /**
      * @inheritdoc
+     *
      * @author Verdient。
      */
     protected bool $coroutine = true;
 
     /**
-     * @inheritdoc
+     * 构造函数
+     *
      * @author Verdient。
      */
     public function __construct()
@@ -37,7 +41,8 @@ class ProducerProduceCommand extends Command
     }
 
     /**
-     * @inheritdoc
+     * 处理函数
+     *
      * @author Verdient。
      */
     public function handle()
@@ -141,7 +146,9 @@ class ProducerProduceCommand extends Command
 
     /**
      * 获取注释定义的参数
+     *
      * @param string $docComment 注释
+     *
      * @return Param[]
      * @author Verdient。
      */
@@ -152,15 +159,16 @@ class ProducerProduceCommand extends Command
 
     /**
      * 获取参数
+     *
      * @param string $name 参数名称
      * @param ReflectionNamedType $type 参数类型
      * @param bool $hasDefault 是否有默认值
      * @param mixed $default 默认值
      * @param string $description 参数描述
-     * @return mixed
+     *
      * @author Verdient。
      */
-    protected function getParam($name, $type, $hasDefault, $default = null, $description = null,)
+    protected function getParam($name, $type, $hasDefault, $default = null, $description = null): mixed
     {
         if (!$type) {
             $type = 'string';
@@ -194,9 +202,9 @@ class ProducerProduceCommand extends Command
     }
 
     /**
-     * @inheritdoc
      * @author Verdient。
      */
+    #[Override]
     protected function getArguments()
     {
         return [

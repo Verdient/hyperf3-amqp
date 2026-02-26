@@ -9,6 +9,7 @@ use Verdient\cli\Console;
 
 /**
  * 生产者列表
+ *
  * @author Verdient。
  */
 class ProducerListCommand extends Command
@@ -16,7 +17,6 @@ class ProducerListCommand extends Command
     use ParseProducers;
 
     /**
-     * @inheritdoc
      * @author Verdient。
      */
     public function __construct()
@@ -26,7 +26,8 @@ class ProducerListCommand extends Command
     }
 
     /**
-     * @inheritdoc
+     * 处理函数
+     *
      * @author Verdient。
      */
     public function handle()
@@ -38,6 +39,7 @@ class ProducerListCommand extends Command
         }
 
         $data = [];
+
         foreach ($producers as $name => $producer) {
             $name = str_replace('\\', '.', $producer['class']);
             $data[] = [
@@ -48,6 +50,7 @@ class ProducerListCommand extends Command
                 $producer['pool']
             ];
         }
+
         Console::table($data, [
             '名称',
             '描述',

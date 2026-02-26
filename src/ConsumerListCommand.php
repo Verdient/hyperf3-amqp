@@ -10,6 +10,7 @@ use Verdient\cli\Console;
 
 /**
  * 消费者列表
+ *
  * @author Verdient。
  */
 class ConsumerListCommand extends Command
@@ -17,7 +18,8 @@ class ConsumerListCommand extends Command
     use ParseConsumers;
 
     /**
-     * @inheritdoc
+     * 构造函数
+     *
      * @author Verdient。
      */
     public function __construct(protected ContainerInterface $container)
@@ -27,7 +29,8 @@ class ConsumerListCommand extends Command
     }
 
     /**
-     * @inheritdoc
+     * 处理函数
+     *
      * @author Verdient。
      */
     public function handle()
@@ -42,19 +45,21 @@ class ConsumerListCommand extends Command
         $enablerManager = $this->container->get(EnablerManager::class);
 
         $data = [];
-        foreach ($consumers as $name => $producer) {
-            $name = str_replace('\\', '.', $producer['class']);
+
+        foreach ($consumers as $name => $consumer) {
+            $name = str_replace('\\', '.', $consumer['class']);
             $data[] = [
                 $name,
-                $producer['description'],
-                $producer['exchange'],
-                $producer['routingKey'],
-                $producer['queue'],
-                $producer['enable'] ? '是' : '否',
-                $enablerManager->getEnablerName($producer['class']),
-                $producer['pool']
+                $consumer['description'],
+                $consumer['exchange'],
+                $consumer['routingKey'],
+                $consumer['queue'],
+                $consumer['enable'] ? '是' : '否',
+                $enablerManager->getEnablerName($consumer['class']),
+                $consumer['pool']
             ];
         }
+
         Console::table($data, [
             '名称',
             '描述',

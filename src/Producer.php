@@ -4,19 +4,22 @@ namespace Verdient\Hyperf3\Amqp;
 
 use Hyperf\Amqp\Message\ProducerMessageInterface;
 use Hyperf\Amqp\Producer as AmqpProducer;
-use Hyperf\Context\ApplicationContext;
+use Verdient\Hyperf3\Di\Container;
 
 /**
  * 生产者
+ *
  * @author Verdient。
  */
 class Producer
 {
     /**
      * 生产消息
+     *
      * @param ProducerMessageInterface|ProducerMessageInterface[] $message 消息
      * @param bool $confirm 消息是否需要确认
      * @param int $timeout 超时时间
+     *
      * @author Verdeint。
      */
     public static function produce(
@@ -24,8 +27,11 @@ class Producer
         bool $confirm = true,
         int $timeout = 5
     ): bool {
-        /** @var AmqpProducer */
-        $producer = ApplicationContext::getContainer()->get(AmqpProducer::class);
+
+        if (!$producer = Container::getOrNull(AmqpProducer::class)) {
+            return false;
+        }
+
         if (is_array($message)) {
             $isOK = true;
             foreach ($message as $message2) {
@@ -35,6 +41,7 @@ class Producer
             }
             return $isOK;
         }
+
         return $producer->produce($message, $confirm, $timeout);
     }
 }
