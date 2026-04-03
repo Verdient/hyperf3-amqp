@@ -60,6 +60,19 @@ abstract class AbstractConsumer extends ConsumerMessage
      * @author Verdient。
      */
     #[Override]
+    public function isEnable(): bool
+    {
+        if ($this->enable === false) {
+            return false;
+        }
+
+        return config('amqp.consumer_enable', $this->enable);
+    }
+
+    /**
+     * @author Verdient。
+     */
+    #[Override]
     public function consumeMessage($data, AMQPMessage $message): Result
     {
         if (!$data instanceof Message) {
