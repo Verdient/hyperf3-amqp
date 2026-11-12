@@ -21,10 +21,10 @@
         "psr/container": "^2.0",
         "symfony/console": "^7.4",
         "verdient/cli": "^1.0",
-        "verdient/hyperf3-di": "^2.0",
-        "verdient/hyperf3-event": "^2.0",
-        "verdient/hyperf3-exception": "^2.0",
-        "verdient/hyperf3-logger": "^2.0"
+        "verdient/hyperf3-di": "^2.1",
+        "verdient/hyperf3-event": "^2.1",
+        "verdient/hyperf3-exception": "^2.1",
+        "verdient/hyperf3-logger": "^2.1"
     },
     "autoload": {
         "psr-4": {
