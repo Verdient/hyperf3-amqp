@@ -28,52 +28,54 @@ class ConfigProvider
                 SetAnnotationDefaultValueListener::class => 9999
             ],
             'logger' => [
-                ConsumerMessageInterface::class => (function (string $name) {
-                    $nameParts = array_map([Str::class, 'kebab'], explode('\\', Utils::simplifyName($name)));
+                'channels' => [
+                    ConsumerMessageInterface::class => (function (string $name) {
+                        $nameParts = array_map([Str::class, 'kebab'], explode('\\', Utils::simplifyName($name)));
 
-                    $filename = BASE_PATH . '/runtime/logs/consumer/' . implode('/', $nameParts) . '/.log';
+                        $filename = BASE_PATH . '/runtime/logs/consumer/' . implode('/', $nameParts) . '/.log';
 
-                    return [
-                        'handler' => [
-                            'class' => RotatingFileHandler::class,
-                            'constructor' => [
-                                'filename' => $filename,
-                                'filenameFormat' => '{date}'
+                        return [
+                            'handler' => [
+                                'class' => RotatingFileHandler::class,
+                                'constructor' => [
+                                    'filename' => $filename,
+                                    'filenameFormat' => '{date}'
+                                ],
                             ],
-                        ],
-                        'formatter' => [
-                            'class' => LineFormatter::class,
-                            'constructor' => [
-                                'format' => "%datetime% [%level_name%] %message%\n",
-                                'dateFormat' => 'Y-m-d H:i:s',
-                                'allowInlineLineBreaks' => true,
-                            ],
-                        ]
-                    ];
-                })->bindTo(null),
-                ProducerMessageInterface::class => (function (string $name) {
-                    $nameParts = array_map([Str::class, 'kebab'], explode('\\', Utils::simplifyName($name)));
+                            'formatter' => [
+                                'class' => LineFormatter::class,
+                                'constructor' => [
+                                    'format' => "%datetime% [%level_name%] %message%\n",
+                                    'dateFormat' => 'Y-m-d H:i:s',
+                                    'allowInlineLineBreaks' => true,
+                                ],
+                            ]
+                        ];
+                    })->bindTo(null),
+                    ProducerMessageInterface::class => (function (string $name) {
+                        $nameParts = array_map([Str::class, 'kebab'], explode('\\', Utils::simplifyName($name)));
 
-                    $filename = BASE_PATH . '/runtime/logs/producer/' . implode('/', $nameParts) . '/.log';
+                        $filename = BASE_PATH . '/runtime/logs/producer/' . implode('/', $nameParts) . '/.log';
 
-                    return [
-                        'handler' => [
-                            'class' => RotatingFileHandler::class,
-                            'constructor' => [
-                                'filename' => $filename,
-                                'filenameFormat' => '{date}'
+                        return [
+                            'handler' => [
+                                'class' => RotatingFileHandler::class,
+                                'constructor' => [
+                                    'filename' => $filename,
+                                    'filenameFormat' => '{date}'
+                                ],
                             ],
-                        ],
-                        'formatter' => [
-                            'class' => LineFormatter::class,
-                            'constructor' => [
-                                'format' => "%datetime% [%level_name%] %message%\n",
-                                'dateFormat' => 'Y-m-d H:i:s',
-                                'allowInlineLineBreaks' => true,
-                            ],
-                        ]
-                    ];
-                })->bindTo(null)
+                            'formatter' => [
+                                'class' => LineFormatter::class,
+                                'constructor' => [
+                                    'format' => "%datetime% [%level_name%] %message%\n",
+                                    'dateFormat' => 'Y-m-d H:i:s',
+                                    'allowInlineLineBreaks' => true,
+                                ],
+                            ]
+                        ];
+                    })->bindTo(null)
+                ],
             ]
         ];
     }
